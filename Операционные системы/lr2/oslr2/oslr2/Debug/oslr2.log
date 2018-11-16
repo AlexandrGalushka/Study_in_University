@@ -1,0 +1,4 @@
+﻿  oslr2.cpp
+c:\users\пользователь\desktop\операционные системы\lr2\oslr2\oslr2\oslr2.cpp(45): warning C4129: : неизвестная escape-последовательность
+c:\users\пользователь\desktop\операционные системы\lr2\oslr2\oslr2\oslr2.cpp(37): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  oslr2.vcxproj -> C:\Users\Пользователь\Desktop\Операционные системы\lr2\oslr2\Debug\oslr2.exe

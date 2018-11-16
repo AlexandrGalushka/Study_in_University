@@ -1,0 +1,70 @@
+без критической секции
+
+#include "stdafx.h"
+
+#include <windows.h>
+#include <process.h>
+#include <iostream>
+#include <conio.h>
+#include <queue>
+#include <time.h>
+#include <list>
+
+using namespace std;
+
+#define SIZE 7
+
+struct Point {
+	int x, y;
+	Point(int x, int y) {
+		this->x = x;
+		this->y = y;
+	}
+	Point(){}
+};
+CRITICAL_SECTION critsect;             //критическая секция
+
+queue <Point*> qq;
+HANDLE SetQ, PrintQ, SortQ;       //Потоки для работы с массивом
+
+void Set(void *) {
+	cout << "begin set \n";
+	srand(time(NULL));
+	for (int i = 0; i < SIZE; i++) 
+		qq.push(new Point(rand() % 10 + 1, rand() % 10 + 1));
+	cout << "end of set \n";
+}
+void Print(void *) {
+	cout << "begin print \n";
+	Sleep(1);
+	while (!qq.empty()) {
+		cout << "[" << qq.front()->x << " , " << qq.front()->y << "]";
+		qq.pop();
+	}
+	cout << "end of print \n";
+}
+void Sort(void *) {
+	cout << "begin sort \n";
+	list <Point*> List;
+	while (!qq.empty()) {
+		List.push_front(qq.front());
+		qq.pop();
+	}
+	List.sort();
+	for (auto it = List.begin(); it != List.end(); it++)
+		qq.push(*it);
+	cout << "end of sort \n";
+}
+
+
+int main()
+{
+	InitializeCriticalSection(&critsect);
+	SetQ = (HANDLE)_beginthread(Set, 1024, NULL);
+	SortQ = (HANDLE)_beginthread(Sort, 1024, NULL);
+	PrintQ = (HANDLE)_beginthread(Print, 1024, NULL);
+	
+	DeleteCriticalSection(&critsect);
+	system("pause");
+	return 0;
+}
